@@ -1,15 +1,18 @@
 import { NotFound } from 'http-errors'
 import Product from './model'
+import Category from '../categories/model'
 import mongoose from 'mongoose'
 
 export class ProductsController {
 
   index(req, res, next) {
     req.ability.throwUnlessCan('read', Product)
-    const query = req.params.category_id ? Product.find({ category_id: req.params.category_id }) : Product.find()
-    query.accessibleBy(req.ability)
+
+    Category.findOne(mongoose.Types.ObjectId.isValid(req.params.category_id) ? { _id: req.params.category_id } : { slug: req.params.category_id })
+      .then(category => (category ? Product.find({ category_id: category._id }) : Product.find()).accessibleBy(req.ability))
       .then(products => res.json(products))
       .catch(next)
+
   }
 
   show(req, res, next) {
