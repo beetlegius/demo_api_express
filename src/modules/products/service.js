@@ -51,7 +51,7 @@ export class ProductsController {
           return product.remove().then( () => product )
         }
       })
-      .then(product => res.status(204).send())
+      .then(product => res.sendStatus(204))
       .catch(next)
   }
 

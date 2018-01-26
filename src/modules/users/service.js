@@ -63,7 +63,7 @@ export class UsersController {
           return user.remove().then( () => user )
         }
       })
-      .then(user => res.status(204).send())
+      .then(user => res.sendStatus(204))
       .catch(next)
   }
 

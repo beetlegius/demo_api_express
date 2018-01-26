@@ -50,7 +50,7 @@ export class CategoriesController {
           return category.remove().then( () => category )
         }
       })
-      .then(category => res.status(204).send())
+      .then(category => res.sendStatus(204))
       .catch(next)
   }
 
