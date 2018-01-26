@@ -1,5 +1,6 @@
 import { NotFound } from 'http-errors'
 import Category from './model'
+import mongoose from 'mongoose'
 
 export class CategoriesController {
 
@@ -11,7 +12,8 @@ export class CategoriesController {
   }
 
   show(req, res, next) {
-    Category.findOne({ _id: req.params.id })
+    const query = mongoose.Types.ObjectId.isValid(req.params.id) ? { _id: req.params.id } : { slug: req.params.id }
+    Category.findOne(query)
       .then(category => {
         if (!category) throw new NotFound('Category not found')
 

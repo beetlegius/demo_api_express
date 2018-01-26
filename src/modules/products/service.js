@@ -1,5 +1,6 @@
 import { NotFound } from 'http-errors'
 import Product from './model'
+import mongoose from 'mongoose'
 
 export class ProductsController {
 
@@ -12,7 +13,8 @@ export class ProductsController {
   }
 
   show(req, res, next) {
-    Product.findOne({ _id: req.params.id })
+    const query = mongoose.Types.ObjectId.isValid(req.params.id) ? { _id: req.params.id } : { slug: req.params.id }
+    Product.findOne(query)
       .then(product => {
         if (!product) throw new NotFound('Product not found')
 
