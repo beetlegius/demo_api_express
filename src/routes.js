@@ -7,7 +7,6 @@ import { config } from './config'
 export function configure(app) {
 
   app.post('/authenticate', SessionsController.create)
-  app.post('/users', UsersController.create)
 
   configurePassport(passport, { secretOrKey: config.jwt.secret })
   app.use(passport.initialize())
@@ -16,6 +15,7 @@ export function configure(app) {
   app.get('/users/profile', UsersController.profile)
   app.patch('/users/profile', UsersController.profile)
   app.get('/users', UsersController.index)
+  app.post('/users', UsersController.create)
   app.get('/users/:id', UsersController.show)
   app.patch('/users/:id', UsersController.update)
   app.delete('/users/:id', UsersController.destroy)

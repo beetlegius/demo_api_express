@@ -23,7 +23,7 @@ export class UsersController {
 
   static create(req, res, next) {
     const user = new User(Object.assign({}, req.body.user, {}))
-    // req.ability.throwUnlessCan('create', user)
+    req.ability.throwUnlessCan('create', user)
     user.save().catch(next).then(user => res.status(201).json(user))
   }
 
