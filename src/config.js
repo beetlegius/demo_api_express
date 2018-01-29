@@ -1,7 +1,8 @@
 export const config = {
   port: process.env.PORT || 5000,
   database: {
-    url: 'mongodb://localhost:27017/api',
+    // url: 'mongodb://localhost:27017/api',
+    url: 'mongodb://heroku_448402fc:jjlpqtejp0kr5f213ircbtc7ta@ds119088.mlab.com:19088/heroku_448402fc',
     options: {}
   },
   jwt: {
