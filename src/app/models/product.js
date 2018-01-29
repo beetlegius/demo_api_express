@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import { slugify } from 'lodash-addons'
-import Category from '../categories/model'
+import Category from './category'
 
 const Product = new Schema({
   category_id: { type: Schema.Types.ObjectId, ref: 'Category', required: true },

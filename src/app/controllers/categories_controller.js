@@ -1,17 +1,17 @@
 import { NotFound } from 'http-errors'
-import Category from './model'
+import Category from '../models/category'
 import mongoose from 'mongoose'
 
 export class CategoriesController {
 
-  index(req, res, next) {
+  static index(req, res, next) {
     req.ability.throwUnlessCan('read', Category)
     Category.accessibleBy(req.ability)
       .then(categories => res.json(categories))
       .catch(next)
   }
 
-  show(req, res, next) {
+  static show(req, res, next) {
     const query = mongoose.Types.ObjectId.isValid(req.params.id) ? { _id: req.params.id } : { slug: req.params.id }
     Category.findOne(query)
       .then(category => {
@@ -23,14 +23,14 @@ export class CategoriesController {
       .catch(next)
   }
 
-  create(req, res, next) {
+  static create(req, res, next) {
     const category = new Category(Object.assign({}, req.body.category, { user_id: req.user._id }))
 
     req.ability.throwUnlessCan('create', category)
-    category.save().catch(next).then( () => res.status(201).json(category) )
+    category.save().catch(next).then(category => res.status(201).json(category))
   }
 
-  update(req, res, next) {
+  static update(req, res, next) {
     Category.findOne({ _id: req.params.id })
       .then(category => {
         if (!category) throw new NotFound('Category not found')
@@ -44,7 +44,7 @@ export class CategoriesController {
       .catch(next)
   }
 
-  destroy(req, res, next) {
+  static destroy(req, res, next) {
     Category.findOne({ _id: req.params.id })
       .then(category => {
         if (category) {

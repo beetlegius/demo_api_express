@@ -3,6 +3,7 @@ import { AbilityBuilder, Ability } from 'casl'
 const defineAbilitiesFor = (user) => {
   const { rules, can } = AbilityBuilder.extract()
 
+  can('create', 'User')
   if (user) {
     can('profile', 'User')
     can('read', ['Category', 'Product'])

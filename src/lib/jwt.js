@@ -2,7 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { Unauthorized } from 'http-errors'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
-import User from '../users/model'
+import User from '../app/models/user'
 
 let BLANK_JWT
 

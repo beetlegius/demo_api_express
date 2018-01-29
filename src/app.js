@@ -7,10 +7,7 @@ import { mongoosePlugin as abilitiesPlugin } from 'casl'
 
 // llamada a los módulos propios generales
 import { config } from './config'
-import { errorHandler } from './error-handler'
-
-// definición de módulos propios para cargar
-const MODULES = ['auth', 'categories', 'products', 'users']
+import { errorHandler } from './lib/error-handler'
 
 export default () => {
   // declaración de la app y del router
@@ -26,12 +23,8 @@ export default () => {
   // morgan logs
   app.use(morgan('dev'))
 
-  // carga de los módulos
-  MODULES.forEach(name => {
-    const module = require(`./modules/${name}`)
-    // configuración de cada módulo
-    if (typeof module.configure === 'function') module.configure(app)
-  })
+  const routes = require('./routes')
+  routes.configure(app)
 
   // manejo de errores
   app.use(errorHandler)

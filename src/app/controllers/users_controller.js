@@ -1,29 +1,16 @@
 import { NotFound } from 'http-errors'
-import User from './model'
+import User from '../models/user'
 
 export class UsersController {
 
-  profile(req, res, next) {
-    User.findOne(req.user._id)
-      .then(user => {
-        req.ability.throwUnlessCan('profile', user)
-
-        if (req.method === 'PATCH') user.set(req.body.user)
-
-        return user.save()
-      })
-      .then(user => res.json(user))
-      .catch(next)
-  }
-
-  index(req, res, next) {
+  static index(req, res, next) {
     req.ability.throwUnlessCan('read', User)
     User.accessibleBy(req.ability)
       .then(users => res.json(users))
       .catch(next)
   }
 
-  show(req, res, next) {
+  static show(req, res, next) {
     User.findOne({ _id: req.params.id })
       .then(user => {
         if (!user) throw new NotFound('User not found')
@@ -34,14 +21,13 @@ export class UsersController {
       .catch(next)
   }
 
-  create(req, res, next) {
+  static create(req, res, next) {
     const user = new User(Object.assign({}, req.body.user, {}))
-
-    req.ability.throwUnlessCan('create', user)
-    user.save().catch(next).then( () => res.status(201).json(user) )
+    // req.ability.throwUnlessCan('create', user)
+    user.save().catch(next).then(user => res.status(201).json(user))
   }
 
-  update(req, res, next) {
+  static update(req, res, next) {
     User.findOne({ _id: req.params.id })
       .then(user => {
         if (!user) throw new NotFound('User not found')
@@ -55,7 +41,7 @@ export class UsersController {
       .catch(next)
   }
 
-  destroy(req, res, next) {
+  static destroy(req, res, next) {
     User.findOne({ _id: req.params.id })
       .then(user => {
         if (user) {
@@ -64,6 +50,19 @@ export class UsersController {
         }
       })
       .then(user => res.sendStatus(204))
+      .catch(next)
+  }
+
+  static profile(req, res, next) {
+    User.findOne(req.user._id)
+      .then(user => {
+        req.ability.throwUnlessCan('profile', user)
+
+        if (req.method === 'PATCH') user.set(req.body.user)
+
+        return user.save()
+      })
+      .then(user => res.json(user))
       .catch(next)
   }
 
